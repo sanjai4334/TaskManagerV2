@@ -1,0 +1,53 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem 0;
+}
+
+.task-form {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-list {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-item {
+  transition: background-color 0.3s ease;
+}
+
+.task-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.dashboard-widget {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-widget:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 600px) {
+  .main-content {
+    padding: 1rem 0;
+  }
+
+  .task-form,
+  .task-list {
+    padding: 1rem;
+  }
+}
