@@ -1,5 +1,6 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Switch, FormControlLabel } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
+import { Brightness7 as SunIcon, Brightness4 as MoonIcon } from '@mui/icons-material';
 
 const Header = ({ darkMode, setDarkMode, children }) => {
   return (
@@ -9,16 +10,9 @@ const Header = ({ darkMode, setDarkMode, children }) => {
           Task Manager
         </Typography>
         {children}
-        <FormControlLabel
-          control={
-            <Switch
-              checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
-              color="default"
-            />
-          }
-          label="Dark Mode"
-        />
+        <IconButton color="inherit" onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? <SunIcon /> : <MoonIcon />}
+        </IconButton>
       </Toolbar>
     </AppBar>
   );
