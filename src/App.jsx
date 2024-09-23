@@ -8,6 +8,9 @@ import TaskForm from './components/TaskForm';
 import QuickAddTask from './components/QuickAddTask';
 import Dashboard from './components/Dashboard';
 import { DragDropContext } from 'react-beautiful-dnd';
+import NotificationCenter from './components/NotificationCenter';
+import { Badge, IconButton } from '@mui/material';
+import { Notifications as NotificationsIcon } from '@mui/icons-material';
 
 const App = () => {
   const [tasks, setTasks] = useState(() => {
@@ -17,6 +20,7 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [advancedFormOpen, setAdvancedFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [notificationOpen, setNotificationOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -54,11 +58,24 @@ const App = () => {
     setAdvancedFormOpen(true);
   };
 
+  const dueTasks = tasks.filter(task => {
+    if (!task.dueDate) return false;
+    const dueDate = new Date(task.dueDate);
+    const today = new Date();
+    return dueDate <= today && !task.completed;
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="app-container">
-        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Header darkMode={darkMode} setDarkMode={setDarkMode}>
+          <IconButton color="inherit" onClick={() => setNotificationOpen(true)}>
+            <Badge badgeContent={dueTasks.length} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+        </Header>
         <Container maxWidth="md" className="main-content">
           <Box sx={{ my: 4 }}>
             <Dashboard tasks={tasks} />
@@ -75,6 +92,11 @@ const App = () => {
             <TaskForm setTasks={setTasks} closeForm={closeAdvancedForm} editingTask={editingTask} />
           </Box>
         </Drawer>
+        <NotificationCenter 
+          open={notificationOpen} 
+          onClose={() => setNotificationOpen(false)} 
+          tasks={tasks} 
+        />
       </div>
     </ThemeProvider>
   );
