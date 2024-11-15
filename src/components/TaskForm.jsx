@@ -21,7 +21,7 @@ const TaskForm = ({ setTasks, closeForm, editingTask }) => {
     }
   }, [editingTask]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
     
@@ -33,24 +33,23 @@ const TaskForm = ({ setTasks, closeForm, editingTask }) => {
       dueDate,
     };
 
-    if (editingTask) {
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === editingTask.id ? { ...task, ...taskData } : task
-        )
-      );
-    } else {
-      const newTask = {
-        id: Date.now(),
-        ...taskData,
-        completed: false,
-        subtasks: [],
-      };
-      setTasks((prevTasks) => [...prevTasks, newTask]);
-    }
+    try {
+      const response = await fetch('http://localhost:5000/api/tasks', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(taskData)
+      });
 
-    resetForm();
-    closeForm();
+      const newTask = await response.json();
+      setTasks(prevTasks => [...prevTasks, newTask]);
+      resetForm();
+      closeForm();
+    } catch (error) {
+      console.error('Failed to create task:', error);
+    }
   };
 
   const resetForm = () => {
