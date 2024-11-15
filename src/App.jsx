@@ -7,7 +7,6 @@ import TaskList from './components/TaskList';
 import TaskForm from './components/TaskForm';
 import QuickAddTask from './components/QuickAddTask';
 import Dashboard from './components/Dashboard';
-import { DragDropContext } from 'react-beautiful-dnd';
 import NotificationCenter from './components/NotificationCenter';
 import { Badge, IconButton } from '@mui/material';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
@@ -35,14 +34,6 @@ const App = () => {
       mode: darkMode ? 'dark' : 'light',
     },
   });
-
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-    const newTasks = Array.from(tasks);
-    const [reorderedTask] = newTasks.splice(result.source.index, 1);
-    newTasks.splice(result.destination.index, 0, reorderedTask);
-    setTasks(newTasks);
-  };
 
   const openAdvancedForm = () => {
     setAdvancedFormOpen(true);
@@ -80,11 +71,9 @@ const App = () => {
           <Box sx={{ my: 4 }}>
             <Dashboard tasks={tasks} />
             <QuickAddTask setTasks={setTasks} openAdvancedForm={openAdvancedForm} />
-            <DragDropContext onDragEnd={onDragEnd}>
-              <div className="task-list">
-                <TaskList tasks={tasks} setTasks={setTasks} onEditTask={handleEditTask} />
-              </div>
-            </DragDropContext>
+            <div className="task-list">
+              <TaskList tasks={tasks} setTasks={setTasks} onEditTask={handleEditTask} />
+            </div>
           </Box>
         </Container>
         <Drawer anchor="right" open={advancedFormOpen} onClose={closeAdvancedForm}>
